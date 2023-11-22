@@ -1,4 +1,6 @@
 # Books-Shop
+Simple Flask-application for selling books
+
 ```shell
 
 #.env file 
