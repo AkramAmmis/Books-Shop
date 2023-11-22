@@ -1,6 +1,7 @@
 # Books-Shop
 ### Simple Flask-application for selling books
 
+you need .env file to create like here
 ```shell
 
 #.env file 
