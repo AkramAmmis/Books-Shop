@@ -13,6 +13,7 @@ def payment(id):  # put application's code here
    
     title = book.title
     price = book.price
+    
     configure({
         "mode": app.config['PAYPAL_MODE'],  # sandbox für Tests, live für den Produktivmodus
         "client_id": app.config['PAYPAL_CLIENT_ID'],

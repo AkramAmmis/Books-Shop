@@ -22,7 +22,7 @@ def create_app():
     ### environment konfigurationen 
     load_dotenv()
     app.config.from_object('config.settings.Development')
-    print(app.config['PAYPAL_MODE'])
+
     from .admibp.views import MyAdminIndexView
     
     #### Initialize extensions
