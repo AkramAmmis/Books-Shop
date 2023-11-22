@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block title%}{{title}}{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1>Warenkorb</h1>
+    <div class="row" >
+        
+        {% for cartitem in user.cartitems%}
+        {% for book in books%}
+        {% if cartitem.book_id == book.id%}
+        <div class="col-md-3 mb-4">
+            <div class="card" style="width:300px; ">
+                {% if book.image_name %}
+                <img src="../../static/book_images/{{ book.image_name }}" class="card-img-top" alt="{{ book.title }}" style="height: 400px;">
+                {% elif  book.image %}
+                <img src="{{ book.image }}" class="card-img-top" alt="{{ book.title }}" style="height: 400px;">
+                {% endif %}
+                <div class="card-body">
+                    <h3 class="card-title">{{ book.title }}</h3>
+                    <p class="card-text">Preis: {{ book.price }} €</p>
+                    <a href="/bookdetails/{{ cartitem.book_id }}" class="btn btn-primary">Details anzeigen</a>
+                    <a href="remove_from_cart/{{cartitem.book_id}}"><img src="../../static/icons/warenkorb-0.png"  style="height: 30px; width:30px; margin-left: 85px;"></a> 
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+        {% if gesamtsumme > 0 %}
+        <h2>Gesamtsumme: {{gesamtsumme}}€</h2>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

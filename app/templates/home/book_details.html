@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block title%}{{title}}{% endblock %}
+{% set cart_book_ids = user.cartitems|map(attribute='book_id')|list %}
+{% block body %}
+    <div class="container mt-5">
+        <h1>Buchtdetails</h1>
+        <div class="card">
+            <center>
+                {% if book.image_name %}
+                <img src="../../static/book_images/{{ book.image_name }}" class="card-img-top" alt="{{ book.title }}"  style="height: 500px; width:300px">
+                {% elif  book.image %}
+                <img src="{{ book.image }}" class="card-img-top" alt="{{ book.title }}"  style="height: 500px; width:300px"">
+                {% endif %}
+           
+            <div class="card-body">
+                <h2 class="card-title">{{ book.title }}</h2>
+                <p style="font-size: 20px;" class="card-text"> <b> Beschreibung des Buch:</b> {{ book.description }}</p>
+                <h4 class="card-text"> <b>Preis:</b> {{ book.price }} €</h4>
+            </center>
+                <!-- Weitere Produktinformationen anzeigen -->
+            </div>
+        </div>
+        {% if book.author != user.id %}
+            <center><a href="/" class="btn btn-primary mt-3">Zurück zur Produktliste</a>
+                <a href="/order_details/{{book.id}}" class="btn btn-primary mt-3">Bestellen</a>
+            {% if book.id in cart_book_ids %}
+            <a href="/remove_from_cart/{{book.id}}"><img src="../../static/icons/warenkorb-0.png"  style="height: 30px; width:30px; margin-left: 20px; margin-top:12px;"></a> 
+            {% else %}
+            <a href="/add_to_shopping_carts/{{book.id}}"><img src="../../static/icons/warenkorb-1.png"  style="height: 30px; width:30px; margin-left: 20px; margin-top:12px;"></a>
+            {% endif %}
+        {% else %}
+            <center>
+                <a href="/profil" class="btn btn-primary mt-3">Zurück zur profil</a>
+              
+                <a href="/edit_book_page/{{book.id}}" class="btn btn-primary mt-3">bearbeiten</a>
+                <a href="/del_book/{{book.id}}" class="btn btn-danger mt-3">Löschen</a>
+            </center>
+        {% endif %}
+
+        
+    </div>
+{% endblock %}

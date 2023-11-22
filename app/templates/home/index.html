@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block title%}{{title}}{% endblock %}
+{% set cart_book_ids = user.cartitems|map(attribute='book_id')|list %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1>Bücher0</h1>
+        <div class="row">
+            {% for book in books %}
+            <div class="col-md-3 mb-4">
+                <div class="card" style="width:300px; ">
+                    {% if book.image_name %}
+                    <img src="../../static/book_images/{{ book.image_name }}" class="card-img-top" alt="{{ book.title }}" style="height: 400px;">
+                    {% elif  book.image %}
+                    <img src="{{ book.image }}" class="card-img-top" alt="{{ book.title }}" style="height: 400px;">
+                    {% endif %}
+                    <div class="card-body">
+                        <h3 class="card-title">{{ book.title }}</h3>
+                        <p class="card-text">Preis: {{ book.price }} €</p>
+                        <a href="/bookdetails/{{ book.id }}" class="btn btn-primary">Details anzeigen</a>
+                        
+                        {% if book.id in cart_book_ids %}
+                            <a href="remove_from_cart/{{ book.id }}"><img src="../../static/icons/warenkorb-0.png" style="height: 30px; width:30px; margin-left: 85px;"></a>
+                        {% else %}
+                            <a href="add_to_shopping_carts/{{ book.id }}"><img src="../../static/icons/warenkorb-1.png" style="height: 30px; width:30px; margin-left: 85px;"></a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

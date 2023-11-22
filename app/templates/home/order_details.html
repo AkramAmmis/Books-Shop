@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block title%}{{title}}{% endblock %}
+
+{% block body %}
+<center>
+    <h1>Bestellung Details</h1>
+
+    <div class="col-md-3 mb-4">
+        <div class="card" style="width:300px; ">
+            {% if book.image_name %}
+            <img src="../../static/book_images/{{ book.image_name }}" class="card-img-top" alt="{{ book.title }}" style="height: 400px;">
+            {% elif  book.image %}
+            <img src="{{ book.image }}" class="card-img-top" alt="{{ book.title }}" style="height: 400px;">
+            {% endif %}
+            <div class="card-body">
+                <h4 class="card-title"><b>title des Buch:</b> {{ book.title }}</h4>
+                <h4 class="card-text"><b>Preis:</b> {{ book.price }} €</h4>
+                <h4><b>Lifarung zu</b> : {{ user.address }}</h4>
+
+                <a href="/payment/{{ book.id }}" class="btn btn-primary">Zahlen bei Paypal</a>
+            </div>
+        </div>
+    </div>
+</center>
+
+{% endblock %}

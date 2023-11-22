@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block title%}Email suchen{{title}}{% endblock %}
+
+{% block body %}
+<form class="row g-3" style="padding-top: 20px;" action=" {{url_for('auth.email_suchen')}}" method="POST">
+    {{ form.csrf_token }}
+    {% from 'render_form.html' import render_field %}
+    {{ render_field(form.email) }}
+        <center>{{form.submit(class="btn btn-primary")}}</center>
+</form>
+
+{% endblock %}

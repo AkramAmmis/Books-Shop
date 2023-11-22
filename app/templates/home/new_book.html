@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block title%}{{title}}{% endblock %}
+
+{% block body %}
+<center><h1>Ein buch hinzufügen</h1></center>
+
+<form class="row g-3" style="padding-top: 20px;" action="/add_book" method="POST" enctype="multipart/form-data">
+
+    {{ form.csrf_token }}
+
+    {% from 'render_form.html' import render_field %}
+
+    {{ render_field(form.title) }}
+    {{ render_field(form.description) }}
+    {{ render_field(form.price) }}
+    {{ render_field(form.url_img) }}
+    {{ render_field(form.image) }}
+    <center>{{form.submit(class="btn btn-primary")}}</center>
+</form>   
+{% endblock %}

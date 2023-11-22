@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/css/mian.css">
+    <title>{% block title%}{% endblock %}</title>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">k1m0</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{{url_for('home.h0me')}}">Startseite</a>
+          </li>
+          {% if not user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('auth.login')}}">Anmeldung</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('auth.register')}}">Register</a>
+          </li>
+          {% endif %}
+          {% if user.is_authenticated %}
+          <li class="nav-item dropdown">
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('home.profil')}}">Profil</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('home.warenkorb')}}">Warenkorb</a>
+            </li>
+            <li class="nav-item dropdown">
+              
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Mehr
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Action</a></li>
+              {% if user.is_authenticated and user.email=='akramammis0@gmail.com' %}<li><a class="dropdown-item" href="/admin">Admin-Panel</a></li>{% endif %}
+              <li><a class="dropdown-item" href="{{url_for('auth.logout')}}">Abmelden</a></li>
+            </ul>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+  <center>{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  {% for category, message in messages %}
+  {% if category == 'error' %}
+  <div class="alert alert-danger alter-dismissible fade show" role="alert">
+      <div class="btn_msg">
+          <span>{{ message }}</span>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+  </div>
+  {% else %}
+  <div class="alert alert-success alter-dismissible fade show" role="alert">
+      <div class="btn_msg">
+          <span>{{ message }}</span>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+  </div>
+  {% endif %} {% endfor %} {% endif %} {% endwith %} </center>
+  {% block body %}{% endblock %} 
+
+
+   
+</body>
+</html>

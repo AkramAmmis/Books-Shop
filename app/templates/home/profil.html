@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block title%}{{title}}{% endblock %}
+
+{% block body %}
+<br>
+<div class="container">
+    <h1>Hi, {{user.username}}</h1>
+    <br>
+    <div class="d-grid gap-2">
+    
+    <a class="btn btn-success" href="new_book" role="button"><h3>Ein buch hinzufügen</h3></a>
+    </div>
+    <br>
+    <h1>Ihre Bücher : </h1>
+    <br><div class="row">
+        {% for book in books %}
+        {% if book.user == user %}
+        <div class="col-md-3 mb-4">
+            <div class="card" style="width:300px; ">
+                {% if book.image_name %}
+                <img src="../../static/book_images/{{ book.image_name }}" class="card-img-top" alt="{{ book.title }}" style="height: 400px;">
+                {% elif  book.image %}
+                <img src="{{ book.image }}" class="card-img-top" alt="{{ book.title }}" style="height: 400px;">
+                {% endif %}
+                <div class="card-body">
+                    <h3 class="card-title">{{ book.title }}</h3>
+                    <p class="card-text">Preis: {{ book.price }} €</p>
+                    <a href="/bookdetails/{{ book.id }}" class="btn btn-primary">Details anzeigen</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+  </div>
+
+{% endblock %}

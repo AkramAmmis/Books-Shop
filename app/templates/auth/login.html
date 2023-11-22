@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block title%}{{title}}{% endblock %}
+
+{% block body %}
+<center><h1>Anmeldung</h1></center>
+
+
+<form class="row g-3" style="padding-top: 20px;" action=" {{url_for('auth.login')}}" method="POST">
+    {{ form.csrf_token }}
+    {% from 'render_form.html' import render_field %}
+    {{ render_field(form.username) }}
+    {{ render_field(form.password) }}
+        <center>{{form.submit(class="btn btn-primary")}}</center>
+</form>
+
+<center><a href="/email_suchen" style="font-size:12px;">Ich habe mein Passwort vergessen.</a></center>
+<img src="karamkaram.jpg" alt="" sizes="" srcset="">
+{% endblock %}

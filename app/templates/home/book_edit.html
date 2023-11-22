@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title%}{{title}}{% endblock %}
+
+{% block body %}
+
+<div class="container mt-5">
+<form class="row g-3" style="padding-top: 20px;" action="/edit_book_page/{{book.id}}" method="POST" enctype="multipart/form-data">
+
+    {{ form.csrf_token }}
+
+    {% from 'render_form.html' import render_field %}
+
+    {{ render_field(form.title, value=book.title) }}
+    {{ render_field(form.description, value=book.title) }}
+    {{ render_field(form.price, value=book.price) }}
+    {{ render_field(form.url_img, value=book.image) }}
+    {{ render_field(form.image) }}
+    <center>{{form.submit(class="btn btn-primary")}}</center>
+</form>   
+</div>
+
+ 
+
+{% endblock %}
