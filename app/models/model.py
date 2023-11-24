@@ -41,7 +41,8 @@ class CartItem(db.Model):
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)  
     book_id = db.Column(db.Integer)
-    author = db.Column(db.Integer, db.ForeignKey('user.id'))
+    buyer_id = db.Column(db.Integer) 
+    seller_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     
 class UserSchema(ma.Schema):
     def Meta():

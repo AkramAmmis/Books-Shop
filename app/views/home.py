@@ -45,6 +45,8 @@ def warenkorb():
 def add_to_shopping_carts(id):
     book = Book.query.filter_by(id=id).first()
     new_cartitem = CartItem(user_id=current_user.id, book_id=id,author=current_user.id)
+    print(current_user)
+    print(current_user.id)
     book.warenkorb = 1
     db.session.add(new_cartitem)
     db.session.commit()

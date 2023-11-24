@@ -1,8 +1,10 @@
-from flask import Flask, redirect, jsonify, request, url_for, Blueprint, flash
+from flask import Flask, redirect, jsonify, request, url_for, Blueprint, flash, session
 from paypalrestsdk import Payment, configure
 from app.models import db
-from app.models.model import Book
+from app.models.model import Book, Order
 from .. import app
+from flask_login import current_user, login_required
+
 payment_blueprint = Blueprint('payment_blueprint', __name__)
 
 
@@ -10,9 +12,12 @@ payment_blueprint = Blueprint('payment_blueprint', __name__)
 @payment_blueprint.route('/payment/<int:id>', methods=['POST', 'GET'])
 def payment(id):  # put application's code here
     book = Book.query.filter_by(id=id).first()
-   
     title = book.title
     price = book.price
+    seller_id = book.user.id
+    
+    session['book_id'] = str(id)
+    session['seller_id'] = str(seller_id)
     
     configure({
         "mode": app.config['PAYPAL_MODE'],  # sandbox für Tests, live für den Produktivmodus
@@ -33,10 +38,10 @@ def payment(id):  # put application's code here
             "item_list": {
                 "items": [{
                     "name": title,
-                    "sku": "123",
+                    "sku": 123,
                     "price": price,
                     "currency": "EUR",
-                    "quantity": 1
+                    "quantity": 1,
                 }]
             },
             "amount": {
@@ -44,13 +49,15 @@ def payment(id):  # put application's code here
                 "currency": "EUR"
             },
             "description": "Kauf eines Buchs"
-        }]
+        }],
+  
     })
-
+    
     if payment.create():
         for link in payment.links:
+            
             if link.method == 'REDIRECT':
-                print('11', redirect(link.href))
+                
                 return redirect(link.href)
 
     else:
@@ -62,9 +69,16 @@ def confirm_payment():
     payment_id = request.args.get("paymentId")
     payer_id = request.args.get("PayerID")
     payment = Payment.find(payment_id)
-
+    
     if payment.execute({"payer_id": payer_id}):
+    
+        order =Order(book_id=session['book_id'], buyer_id=current_user.id, seller_id=session['seller_id'])
+        db.session.add(order)
+        db.session.commit()
+
+        
         flash('Es wurde erfolgreich gezahlt', category='success')
+        
         return redirect(url_for('home.profil'))
     else:
         flash('Es wurde nicht erfolgreich gezahlt, versuchen Sie nochmal!', category='error')

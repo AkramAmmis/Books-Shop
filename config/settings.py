@@ -1,6 +1,6 @@
 #settings datei
-from dotenv import load_dotenv
 import os
+from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -20,7 +20,6 @@ class Config():
     
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    print(MAIL_PASSWORD,MAIL_USERNAME)
 
     PAYPAL_CLIENT_ID = os.environ.get('PAYPAL_CLIENT_ID')
     PAYPAL_CLIENT_SECRET = os.environ.get('PAYPAL_CLIENT_SECRET')

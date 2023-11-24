@@ -35,7 +35,7 @@ def login():
         check_pass = check_password_hash(pwhash=email.password,password=password)
         if check_pass:
             if email.confirm_on == True:
-                login_user(email)
+                login_user(email, remember=True)
                 flash('Erfolgreich eingeloggt!', category='success')
                 return redirect(url_for('home.profil'))
             else:
@@ -50,7 +50,7 @@ def login():
         check_pass = check_password_hash(pwhash=name.password,password=password)
         if check_pass:
             if name.confirm_on == True:
-                login_user(name)
+                login_user(name, remember=True)
                 flash('Erfolgreich eingeloggt!', category='success')
                 return redirect(url_for('home.profil'))
         else:   

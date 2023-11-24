@@ -31,10 +31,12 @@ def create_app():
     db.init_app(app)
     ma.init_app(app)
     api.init_app(app)
-    migrate.init_app(app, db)
+    migrate.init_app(app, db, command='db')
     admin.init_app(app,index_view=MyAdminIndexView())
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
+    
+   
 
     #from app.models import db
     from .models.model import User,Book
