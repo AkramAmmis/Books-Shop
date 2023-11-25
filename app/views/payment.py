@@ -71,8 +71,8 @@ def confirm_payment():
     payment = Payment.find(payment_id)
     
     if payment.execute({"payer_id": payer_id}):
-    
-        order =Order(book_id=session['book_id'], buyer_id=current_user.id, seller_id=session['seller_id'])
+        print(current_user)
+        order =Order(book_id=session['book_id'], buyer_id=current_user.id, buyer_name=current_user.username ,seller_id=session['seller_id'])
         db.session.add(order)
         db.session.commit()
 

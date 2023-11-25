@@ -1,7 +1,7 @@
 from flask import redirect,render_template,Blueprint,request,flash,url_for
 from flask_login import current_user, login_required
 import validators
-from ..models.model import Book,db, CartItem
+from ..models.model import Book,db, CartItem, Order
 from  app.forms.book import AddBook_form,EditBook_form
 from os import rename
 from werkzeug.utils import secure_filename
@@ -19,7 +19,18 @@ def h0me():
 @login_required
 def profil():
     books = Book.query.all()
-    return render_template('home/profil.html',title='Page', user=current_user, books=books)
+    orders = Order.query.all()
+    
+    book = Book.query.filter_by(id=current_user.id).first()
+    if not book:
+        orders_sum = None
+    else:
+    
+        orders_sum = 0
+        for order in orders:
+            if order.seller_id == current_user.id:
+                orders_sum += 1
+    return render_template('home/profil.html',title='Page', user=current_user, books=books, orders=orders_sum)
 
 @home.route('/bookdetails/<int:id>')
 def bookdetails(id):
@@ -186,3 +197,11 @@ def edit_book(id):
 def order_details(id):
     book = Book.query.filter_by(id=id).first()
     return render_template('home/order_details.html', user=current_user, book=book)
+
+
+@home.route('/kauforders', methods=['POST', 'GET'])
+@login_required
+def kauforders():
+    books = Book.query.all()
+    orders = Order.query.all()
+    return render_template('home/kauforders.html', user=current_user, books=books,orders=orders)

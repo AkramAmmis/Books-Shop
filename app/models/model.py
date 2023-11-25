@@ -42,7 +42,9 @@ class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)  
     book_id = db.Column(db.Integer)
     buyer_id = db.Column(db.Integer) 
+    buyer_name = db.Column(db.String(255))
     seller_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    
     
 class UserSchema(ma.Schema):
     def Meta():

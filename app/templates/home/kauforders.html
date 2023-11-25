@@ -3,22 +3,15 @@
 {% block title%}{{title}}{% endblock %}
 
 {% block body %}
-<br>
-<div class="container">
-    <h1>Hi,{{user.username}}</h1>
-    <br>
-    <div class="d-grid gap-2">
-        {% if orders != None %}
-    <h2>Kauforder : <a href="/kauforders">{{orders}}</a> </h2>
-        {% endif %}
-    <br>
-    <a class="btn btn-success" href="new_book" role="button"><h3>Ein buch hinzufügen</h3></a>
-    </div>
-    <br>
-    <h1>Ihre Bücher : </h1>
-    <br><div class="row">
+<div class="container mt-5">
+<div class="row">
+
+    {% for order in orders %}
+        {% if user.id == order.seller_id %}
+        
         {% for book in books %}
-        {% if book.user == user %}
+        {% if  order.book_id == book.id%}
+        
         <div class="col-md-3 mb-4">
             <div class="card" style="width:300px; ">
                 {% if book.image_name %}
@@ -29,13 +22,13 @@
                 <div class="card-body">
                     <h3 class="card-title">{{ book.title }}</h3>
                     <p class="card-text">Preis: {{ book.price }} €</p>
-                    <a href="/bookdetails/{{ book.id }}" class="btn btn-primary">Details anzeigen</a>
+                    <p>buyer : {{order.buyer_name}}</p>
                 </div>
             </div>
         </div>
+    </div>      
         {% endif %}
         {% endfor %}
-    </div>
-  </div>
-
+        {% endif %}
+    {% endfor %}
 {% endblock %}
