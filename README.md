@@ -5,7 +5,7 @@ you need .env file to create like here
 ```shell
 
 #.env file 
-ENV = 'Development' #oder Production
+ENV = 'Development' #or Production
 
 SQLALCHEMY_DATABASE_URI = '' #You need to create a MySQL database and add the here.
 
