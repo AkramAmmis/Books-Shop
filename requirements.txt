@@ -14,3 +14,4 @@ Flask-Session
 Flask-SocketIO
 Flask-SQLAlchemy
 Flask-WTF
+os
