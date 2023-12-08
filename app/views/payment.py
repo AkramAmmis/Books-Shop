@@ -15,10 +15,10 @@ def payment(id):  # put application's code here
     title = book.title
     price = book.price
     seller_id = book.user.id
-    
+    quantity = request.form.get('quantity')
     session['book_id'] = str(id)
     session['seller_id'] = str(seller_id)
-    
+    session['quantity'] = quantity
     configure({
         "mode": app.config['PAYPAL_MODE'],  # sandbox für Tests, live für den Produktivmodus
         "client_id": app.config['PAYPAL_CLIENT_ID'],
@@ -41,11 +41,11 @@ def payment(id):  # put application's code here
                     "sku": 123,
                     "price": price,
                     "currency": "EUR",
-                    "quantity": 1,
+                    "quantity": quantity,
                 }]
             },
             "amount": {
-                "total": price,
+                "total": "{:.2f}".format(float(price) * float(quantity)),
                 "currency": "EUR"
             },
             "description": "Kauf eines Buchs"
@@ -71,9 +71,17 @@ def confirm_payment():
     payment = Payment.find(payment_id)
     
     if payment.execute({"payer_id": payer_id}):
-        print(current_user)
-        order =Order(book_id=session['book_id'], buyer_id=current_user.id, buyer_name=current_user.username ,seller_id=session['seller_id'])
-        db.session.add(order)
+        
+        i  = Order.query.filter_by(buyer_id=current_user.id).first()
+        if i:
+            if str(i.book_id) == session['book_id'] :
+                i.quantity += int(session['quantity'])
+            else:
+                order = Order(book_id=session['book_id'], buyer_id=current_user.id, buyer_name=current_user.username ,seller_id=session['seller_id'],quantity=session['quantity'])
+                db.session.add(order)
+        else:
+            order = Order(book_id=session['book_id'], buyer_id=current_user.id, buyer_name=current_user.username ,seller_id=session['seller_id'],quantity=session['quantity'])
+            db.session.add(order)   
         db.session.commit()
 
         

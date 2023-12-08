@@ -17,8 +17,16 @@
                 <h4 class="card-title"><b>title des Buch:</b> {{ book.title }}</h4>
                 <h4 class="card-text"><b>Preis:</b> {{ book.price }} €</h4>
                 <h4><b>Lifarung zu</b> : {{ user.address }}</h4>
-
-                <a href="/payment/{{ book.id }}" class="btn btn-primary">Zahlen bei Paypal</a>
+                <form action="/payment/{{ book.id }}" method="post">
+                <select class="form-select" aria-label="Default select example" style="width: 100px;" name="quantity" id="quantity">
+                    <option selected></option>
+                    <option value="1" selected>1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                  </select>
+                  <br>
+                  <button type="submit">Zahlen bei Paypal</button>
+            </form>
             </div>
         </div>
     </div>

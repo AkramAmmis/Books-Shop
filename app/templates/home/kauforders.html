@@ -1,34 +1,36 @@
 {% extends "layout.html" %}
 
-{% block title%}{{title}}{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block body %}
-<div class="container mt-5">
-<div class="row">
-
-    {% for order in orders %}
-        {% if user.id == order.seller_id %}
-        
-        {% for book in books %}
-        {% if  order.book_id == book.id%}
-        
-        <div class="col-md-3 mb-4">
-            <div class="card" style="width:300px; ">
-                {% if book.image_name %}
-                <img src="../../static/book_images/{{ book.image_name }}" class="card-img-top" alt="{{ book.title }}" style="height: 400px;">
-                {% elif  book.image %}
-                <img src="{{ book.image }}" class="card-img-top" alt="{{ book.title }}" style="height: 400px;">
-                {% endif %}
-                <div class="card-body">
-                    <h3 class="card-title">{{ book.title }}</h3>
-                    <p class="card-text">Preis: {{ book.price }} €</p>
-                    <p>buyer : {{order.buyer_name}}</p>
-                </div>
-            </div>
-        </div>
-    </div>      
-        {% endif %}
+<div class="container">
+    <br>
+    <h1>Kauforders</h1>
+    <br>
+    <div class="row">
+        {% for order in orders %}
+            {% if user.id == order.seller_id %}
+                {% for book in books %}
+                    {% if order.book_id == book.id %}
+                        <div class="col-md-3 mb-4">
+                            <div class="card" style="width: 300px;">
+                                {% if book.image_name %}
+                                    <img src="../../static/book_images/{{ book.image_name }}" class="card-img-top" alt="{{ book.title }}" style="height: 400px;">
+                                {% elif book.image %}
+                                    <img src="{{ book.image }}" class="card-img-top" alt="{{ book.title }}" style="height: 400px;">
+                                {% endif %}
+                                <div class="card-body">
+                                    <h3 class="card-title">{{ book.title }}</h3>
+                                    <p class="card-text">Preis: {{ book.price }} €</p>
+                                    <p>Menge: {{ order.quantity}}</p>
+                                    <p>buyer: {{ order.buyer_name }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
         {% endfor %}
-        {% endif %}
-    {% endfor %}
+    </div>
+</div>
 {% endblock %}
