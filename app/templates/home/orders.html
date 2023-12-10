@@ -9,7 +9,7 @@
     <br>
     <div class="row">
         {% for order in orders %}
-            {% if user.id == order.seller_id %}
+            {% if user.id == order.buyer_id %}
                 {% for book in books %}
                     {% if order.book_id == book.id %}
                         <div class="col-md-3 mb-4">
@@ -23,10 +23,10 @@
                                     <h3 class="card-title">{{ book.title }}</h3>
                                     <p class="card-text">Preis: {{ book.price }} €</p>
                                     <p>Menge: {{ order.quantity}}</p>
-                                    <p>buyer: {{ order.buyer_name }}</p>
-                                    <p>address: {{ order.buyer_adress }}</p>
+                                  
+                                    <p>Liefarung zu: {{order.buyer_name}}, {{ order.buyer_adress }}</p>
                                     {% if not order.delivered %}
-                                    <a class="btn btn-primary" href="/kauforders/delivered/{{order.id}}" role="button">geliefert</a>
+                                    <p> Unterwegs </p>
                                     {% else %}
                                     <div class="row">
                                         <div class="col-md-10">

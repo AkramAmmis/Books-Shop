@@ -72,20 +72,20 @@ def confirm_payment():
     
     if payment.execute({"payer_id": payer_id}):
         
-        i  = Order.query.filter_by(buyer_id=current_user.id).first()
-        if i:
-            if str(i.book_id) == session['book_id'] :
-                i.quantity += int(session['quantity'])
+        order  = Order.query.filter_by(buyer_id=current_user.id).first()
+        if order and not order.delivered:
+            if str(order.book_id) == session['book_id'] :
+                order.quantity += int(session['quantity'])
             else:
-                order = Order(book_id=session['book_id'], buyer_id=current_user.id, buyer_name=current_user.username ,seller_id=session['seller_id'],quantity=session['quantity'])
+                order = Order(book_id=session['book_id'], buyer_id=current_user.id, buyer_name=current_user.username, buyer_adress=current_user.address, seller_id=session['seller_id'],quantity=session['quantity'])
                 db.session.add(order)
         else:
-            order = Order(book_id=session['book_id'], buyer_id=current_user.id, buyer_name=current_user.username ,seller_id=session['seller_id'],quantity=session['quantity'])
+            order = Order(book_id=session['book_id'], buyer_id=current_user.id, buyer_name=current_user.username , buyer_adress=current_user.address,seller_id=session['seller_id'],quantity=session['quantity'])
             db.session.add(order)   
         db.session.commit()
 
         
-        flash('Es wurde erfolgreich gezahlt', category='success')
+        flash('Erfolgreich bezahlt und bestellt', category='success')
         
         return redirect(url_for('home.profil'))
     else:

@@ -205,3 +205,37 @@ def kauforders():
     books = Book.query.all()
     orders = Order.query.all()
     return render_template('home/kauforders.html', user=current_user, books=books,orders=orders)
+
+@home.route('/kauforders/delivered/<int:id>', methods=['POST', 'GET'])
+@login_required
+def delivered(id):
+    order = Order.query.filter_by(id=id).first()
+    order.delivered = True
+    db.session.commit()
+    return redirect(url_for('home.kauforders'))
+
+@home.route('/kauforders/delete/<int:id>', methods=['POST', 'GET'])
+@login_required
+def delete(id):
+    order = Order.query.filter_by(id=id).first()
+    if order.seller_id == current_user.id :
+        order.seller_id = 0
+    elif order.buyer_id == current_user.id :
+        order.buyer_id = 0
+        
+    if order.buyer_id == 0 and order.seller_id == 0:
+        db.session.delete(order)
+    
+    db.session.commit()
+    flash('Es wurde erfolgreich gelöscht')
+    return redirect(request.referrer)
+
+
+
+
+@home.route('/orders', methods=['POST', 'GET'])
+@login_required
+def orders():
+    books = Book.query.all()
+    orders = Order.query.all()
+    return render_template('home/orders.html', user=current_user, books=books,orders=orders)
