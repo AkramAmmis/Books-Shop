@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title%}{{title}}{% endblock %}
+
+{% block body %}
+
+<div class="container mt-5">
+    <form action="/user_data_edit" method="post" enctype="multipart/form-data">
+    {{ form.csrf_token }}
+
+    {% from 'render_form.html' import render_field %}
+    {{ render_field(form.username, value=user.username) }}
+    {{ render_field(form.email, value=user.email) }}
+    {{ render_field(form.password, value=user.password) }}
+    {{ render_field(form.language, value=user.language) }}
+    {{ render_field(form.DateOFbirth, value=user.DateOFbirth) }}
+    {{ render_field(form.logo) }}
+    {{ render_field(form.old_password) }}
+
+    <center>{{form.submit(class="btn btn-primary")}}</center>
+</form>
+</div>
+{% endblock %}
