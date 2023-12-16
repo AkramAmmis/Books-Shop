@@ -26,7 +26,8 @@ class Config():
     PAYPAL_CLIENT_SECRET = os.environ.get('PAYPAL_CLIENT_SECRET')
 
     FLASK_ADMIN_SWATCH = 'cerulean'
-
+    
+    USER_IMAGES = 'users_data'
 class Development(Config):
     DEBUG = True
     PORT = os.environ.get('PORT') or 9000

@@ -17,6 +17,6 @@ class EditBook_form(FlaskForm):
     description = StringField('Description', validators=[DataRequired(), length(min=4)])
     price = IntegerField('Price', validators=[DataRequired()])
     url_img = StringField('Image Url')
-    image = FileField('Image')
+    image = FileField('oder image hochladen')
     submit = SubmitField('Ok')
     

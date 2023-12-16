@@ -43,6 +43,7 @@
             </a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="/orders">orders</a></li>
+              <li><a class="dropdown-item" href="/user_data">Benutzerdaten</a></li>
               {% if user.is_authenticated and user.email=='akramammis0@gmail.com' %}<li><a class="dropdown-item" href="/admin">Admin-Panel</a></li>{% endif %}
               <li><a class="dropdown-item" href="{{url_for('auth.logout')}}">Abmelden</a></li>
             </ul>

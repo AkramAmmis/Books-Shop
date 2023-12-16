@@ -11,7 +11,7 @@ class User(db.Model,UserMixin):
     language = db.Column(db.String(255))
     confirm_on = db.Column(db.Boolean(), default=False)
     password = db.Column(db.String(255))
-    logo_name = db.Column(db.String(255), default='defLogo.jpg') 
+    logo_name = db.Column(db.String(255)) 
     code_pass = db.Column(db.String(255))
     address = db.Column(db.String(255))
     books = db.relationship('Book', backref='user', lazy=True) #many - es ist möglich, dass ein user mehrere bücher hat - (user.books): so werden die Bücher abgefragt, die zu dem User gehören.

@@ -8,14 +8,17 @@
 <form class="row g-3" style="padding-top: 20px;" action="/edit_book_page/{{book.id}}" method="POST" enctype="multipart/form-data">
 
     {{ form.csrf_token }}
-
+    <center></center>
+    <div class="text-center">
+        <img src="/static/book_images/{{ book.image_name }}" class="card-img-top" alt="{{ book.title }}" style="height: 400px; width: 300px;">
+    </div>
     {% from 'render_form.html' import render_field %}
-
-    {{ render_field(form.title, value=book.title) }}
-    {{ render_field(form.description, value=book.title) }}
-    {{ render_field(form.price, value=book.price) }}
-    {{ render_field(form.url_img, value=book.image) }}
+    {{ render_field(form.url_img) }}
     {{ render_field(form.image) }}
+    {{ render_field(form.title, value=book.title) }}
+    {{ render_field(form.description, value=book.description) }}
+    {{ render_field(form.price, value=book.price) }}
+
     <center>{{form.submit(class="btn btn-primary")}}</center>
 </form>   
 </div>

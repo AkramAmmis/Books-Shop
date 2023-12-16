@@ -1,12 +1,14 @@
 from flask import redirect,render_template,Blueprint,request,flash,url_for
 from flask_login import current_user, login_required
 import validators
-from ..models.model import Book,db, CartItem, Order
+from ..models.model import Book,db, CartItem, Order, User
 from  app.forms.book import AddBook_form,EditBook_form
+from app.forms.user import edit_form
 from os import rename
 from werkzeug.utils import secure_filename
 import requests,imghdr
 from PIL import Image
+from werkzeug.security import generate_password_hash, check_password_hash
 
 home = Blueprint('home', __name__)
 
@@ -111,7 +113,7 @@ def add_book():
                 flash(category='error', message='Die eingegebene Image-URL ist ungültig')
                 
     elif image:
-        if imghdr.what(image) != None: # überprüfen, ob die Datei ein bild ist
+        if imghdr.what(image) != None: #überprüfen, ob die Datei ein bild ist
             image_name = form.image.data.filename
             file_name = secure_filename(image_name)
             image.save('app/static/book_images/' + file_name)
@@ -168,21 +170,30 @@ def edit_book(id):
             change = True
 
         if url_img and url_img != book.image :
-            if validators.url(url_img) :
+            if validators.url(url_img):
                 #überprüfen, ob die URL zu einem Bild Führt
                 response = requests.get(url_img)
                 type = response.headers.get('Content-Type')
                                                         
                 if type.startswith('image') == True:
                         book.image = url_img
-                        db.session.commit()
-                        flash('Es wurde hinzufügt', category='success')
+                        change = True
                 else :
                     flash(category='error', message='Die eingegebene Image-URL ist ungültig')
             else :
                 flash(category='error', message='Die eingegebene Image-URL ist ungültig')
+        elif image:
+            if imghdr.what(image) != None: #überprüfen, ob die Datei ein bild ist
+                image_name = form.image.data.filename
+                file_name = secure_filename(image_name)
+                image.save('app/static/book_images/' + file_name)
+                name_save = title.replace(" ", "") + '.jpg' 
+                rename('app/static/book_images/' + file_name, 'app/static/book_images/' + name_save)
+                book.image_name = name_save
+                change = True
      
         if change == True:
+            db.session.commit()
             flash(category='success', message=' die Änderung wurde gespeichert')
         else:
             flash(category='success', message=' es wurde nichts geändert')
@@ -239,3 +250,110 @@ def orders():
     books = Book.query.all()
     orders = Order.query.all()
     return render_template('home/orders.html', user=current_user, books=books,orders=orders)
+
+
+   
+@home.route('/user_data')
+@login_required
+def user_data():
+
+    return render_template('home/user_data.html', 
+                                user=current_user,
+                                title='User Data')
+    
+    
+       
+@home.route('/user_data_edit', methods=['POST', 'GET'])
+@login_required
+def user_data_edit():
+    form = edit_form()
+    username = request.form.get('username')
+    email = request.form.get('email')
+    password = request.form.get('password')
+    DateOFbirth = request.form.get('DateOFbirth')
+    language = request.form.get('language')
+    logo = form.logo.data
+    old_password= request.form.get('old_password')
+    print(current_user.language,'#######')
+    print(logo)
+    print(DateOFbirth)
+    user = User.query.filter_by(username=current_user.username).first()
+    print(current_user.DateOFbirth)
+    def check_password():
+        if old_password:
+            if check_password_hash(user.password, old_password):
+                return 1
+            else:
+                return 0
+        else:
+            return 2 # muss man ein passwort eingeben
+
+    if request.method == 'POST':
+        if (username != current_user.username or email != current_user.email  or password or DateOFbirth != current_user.DateOFbirth
+            or (current_user.language != language and language != 'None') or logo):
+            if check_password() == True :
+
+            ################# Username Edit ###############
+                if username != current_user.username:
+                    if not User.query.filter_by(username=username).first(): 
+                        user.username=username
+                        db.session.commit()
+                        flash('new name is saved', category='success')
+                    else:
+                        flash('Username is already in use. ', category='error')
+
+            ################# Email Edit ##################
+                if email != current_user.email:
+                    if not User.query.filter_by(email=email).first():
+                        new_data['new_email']=email
+                        email = email
+                        print(email)
+                        email_confirm.token(email,'settings')
+                        flash('Pless Check your MailBox.', category='success')
+                    else:
+                       flash('email is already in use. ', category='error')
+
+            ################# Password Edit ################## 
+                if password :
+                    if not check_password_hash(current_user.password, password):
+                        current_user.password = generate_password_hash(password, method='pbkdf2:sha256')
+                        db.session.commit()
+                        flash('new pass is saved', category='success')
+                    else:
+                        flash('this pass is alredy in use!', category='success')
+            ############## Date of birth Edit ################
+                if DateOFbirth != str(current_user.DateOFbirth) :
+                    current_user.DateOFbirth = DateOFbirth
+                    db.session.commit()
+                    flash('datum ist gespeichert',category='success')
+            ############## language Edit #####################
+                if current_user.language != language and language != 'None':
+                    current_user.language = language
+                    db.session.commit()
+                    flash('neue sprache ist gespeichert',category='success')
+            ################ logo Edit ######################
+                if logo:
+                    logo_name = form.logo.data.filename
+                    file_name = secure_filename(logo_name)
+                    logo.save('app/static/users_logo/' + file_name)
+                    name_save = username.replace(" ", "") + '.jpg' 
+                    rename('app/static/users_logo/' + file_name, 'app/static/users_logo/' + name_save)
+                    current_user.logo_name = name_save
+                    db.session.commit()
+                    flash('logo ist gespeichert',category='success')
+            #################################################
+            elif check_password() == 2:
+                flash('enter old pass',category='error')       
+            else:
+                flash('password error', category='error') 
+        else:
+            flash('nothing to change','erorr')
+
+
+    return render_template('home/UserData_edit.html',
+    user = current_user,
+    form=form,
+    logo= current_user.logo_name)
+ 
+   
+   

@@ -13,10 +13,24 @@ class Register_Form(FlaskForm):
     confirm = PasswordField('Passwort erneut', validators=[DataRequired(), equal_to('password'), length(min=6,max=16)])
     submit = SubmitField('register')
     
+    
 class Anmeldung_Form(FlaskForm):
     username = StringField(label='Name oder Email', validators=[DataRequired()])
     password = PasswordField('Passwort', validators=[DataRequired(), length(min=6, max=16)])
     submit = SubmitField('anmelden')
+    
+    
+    
+class edit_form(FlaskForm):
+    username = StringField('username', validators=[length(min=4, max=12)])
+    email = EmailField('email', validators=[length(min=8)])
+    password = PasswordField('Password', validators=[length(min=8, max=16)])
+    DateOFbirth = DateField('Date of Birth', validators=[])
+    language = SelectField('Lanuage', choices=(None,'Arabic', 'Deutsch', 'englich'))
+    logo = FileField('Logo')
+    old_password = PasswordField('Old Password', validators=[length(min=8, max=16)])
+    submit = SubmitField('Save')
+    
     
 class EmailSuchen_Form(FlaskForm):
      email = EmailField('Email', validators=[DataRequired()])

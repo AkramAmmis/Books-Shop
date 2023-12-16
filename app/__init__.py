@@ -18,6 +18,8 @@ def create_app():
     global app
     
     app = Flask(__name__)
+    
+    app.user_images = 'users_data'
 
     ### environment konfigurationen 
     load_dotenv()
