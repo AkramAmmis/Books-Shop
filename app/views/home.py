@@ -1,4 +1,4 @@
-from flask import redirect,render_template,Blueprint,request,flash,url_for
+from flask import redirect,render_template,Blueprint,request,flash,url_for, session
 from flask_login import current_user, login_required
 import validators
 from ..models.model import Book,db, CartItem, Order, User
@@ -9,6 +9,7 @@ from werkzeug.utils import secure_filename
 import requests,imghdr
 from PIL import Image
 from werkzeug.security import generate_password_hash, check_password_hash
+from .email_confirm import token, check_token
 
 home = Blueprint('home', __name__)
 
@@ -303,12 +304,15 @@ def user_data_edit():
                         flash('Username is already in use. ', category='error')
 
             ################# Email Edit ##################
+            
                 if email != current_user.email:
                     if not User.query.filter_by(email=email).first():
-                        new_data['new_email']=email
+                        #new_data['new_email']=email
+                        session['new_email']= email
                         email = email
                         print(email)
-                        email_confirm.token(email,'settings')
+                        
+                        token(email,'home')
                         flash('Pless Check your MailBox.', category='success')
                     else:
                        flash('email is already in use. ', category='error')
@@ -357,3 +361,12 @@ def user_data_edit():
  
    
    
+@home.route('/edit/check_token/<token>', methods=['POST', 'GET'])
+def confirm(token):
+    if check_token(token, False) :
+      current_user.email = session['new_email'] 
+      db.session.commit()
+      flash('neus email ist gespeichert')
+    else:
+        flash('URL ist nicht mehr gültig', category='error')
+    return redirect(url_for('home.user_data'))
