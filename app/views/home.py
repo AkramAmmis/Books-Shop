@@ -4,13 +4,13 @@ import validators
 from ..models.model import Book,db, CartItem, Order, User
 from  app.forms.book import AddBook_form,EditBook_form
 from app.forms.user import edit_form
-from os import rename
+from os import rename, path
 from werkzeug.utils import secure_filename
 import requests,imghdr
 from PIL import Image
 from werkzeug.security import generate_password_hash, check_password_hash
 from .email_confirm import token, check_token
-
+import os.path
 home = Blueprint('home', __name__)
 
 @home.route('/')
@@ -244,7 +244,6 @@ def delete(id):
 
 
 
-
 @home.route('/orders', methods=['POST', 'GET'])
 @login_required
 def orders():
@@ -339,9 +338,13 @@ def user_data_edit():
                 if logo:
                     logo_name = form.logo.data.filename
                     file_name = secure_filename(logo_name)
-                    logo.save('app/static/users_logo/' + file_name)
+                    if not os.path.exists('app/static/user_logo'):
+                        os.mkdir('app/static/user_logo')
+                    logo.save('app/static/user_logo/' + file_name)
                     name_save = username.replace(" ", "") + '.jpg' 
-                    rename('app/static/users_logo/' + file_name, 'app/static/users_logo/' + name_save)
+                    
+                    
+                    rename('app/static/user_logo/' + file_name, 'app/static/user_logo/' + name_save)
                     current_user.logo_name = name_save
                     db.session.commit()
                     flash('logo ist gespeichert',category='success')

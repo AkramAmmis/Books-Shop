@@ -97,9 +97,9 @@ def register():
         if logo : 
             logo_name = form.logo.data.filename
             file_name = secure_filename(logo_name)
-            logo.save('app/static/users_logo/' + file_name)
+            logo.save('app/static/user_logo/' + file_name)
             name_save = username.replace(" ", "") + '.jpg' 
-            rename('app/static/users_logo/' + file_name, 'app/static/users_logo/' + name_save)
+            rename('app/static/user_logo/' + file_name, 'app/static/user_logo/' + name_save)
             new_user = User(username=username, email=email ,DateOFbirth= DateOFbirth,address=address, language=language,logo_name=name_save, password=generate_password_hash(password1,method='pbkdf2:sha256'))
         else:
             new_user = User(username=username, email=email ,DateOFbirth= DateOFbirth,address=address, language=language, logo_name='default_logo.png', password=generate_password_hash(password1,method='pbkdf2:sha256'))
