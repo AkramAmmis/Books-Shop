@@ -8,7 +8,7 @@ load_dotenv()
 class Config():
     DEBUG =  True
     PORT = os.environ.get('PORT') or 6000
-    SERVER_NAME = 'akram.com:5000'
+    SERVER_NAME = '127.0.0.1:5000'
     ENV = os.environ.get('ENV')
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
