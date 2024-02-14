@@ -14,7 +14,7 @@
             <img src="{{ book.image }}" class="card-img-top" alt="{{ book.title }}" style="height: 400px;">
             {% endif %}
             <div class="card-body">
-                <h4 class="card-title"><b>title des Buch:</b> {{ book.title }}</h4>
+                <h4 class="card-title"><b>title :</b> {{ book.title }}</h4>
                 <h4 class="card-text"><b>Preis:</b> {{ book.price }} €</h4>
                 <h4><b>Lifarung zu</b> : {{ user.address }}</h4>
                 <form action="/payment/{{ book.id }}" method="post">
