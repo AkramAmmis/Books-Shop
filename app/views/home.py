@@ -4,7 +4,7 @@ import validators
 from ..models.model import Book,db, CartItem, Order, User
 from  app.forms.book import AddBook_form,EditBook_form
 from app.forms.user import edit_form
-from os import rename, path
+from os import rename, path, mkdir
 from werkzeug.utils import secure_filename
 import requests,imghdr
 from PIL import Image
@@ -117,6 +117,8 @@ def add_book():
         if imghdr.what(image) != None: #überprüfen, ob die Datei ein bild ist
             image_name = form.image.data.filename
             file_name = secure_filename(image_name)
+            if not path.exists('app/static/book_images/'):
+                mkdir('app/static/book_images')
             image.save('app/static/book_images/' + file_name)
             name_save = title.replace(" ", "") + '.jpg' 
             rename('app/static/book_images/' + file_name, 'app/static/book_images/' + name_save)

@@ -8,7 +8,7 @@ from flask_login import login_required, logout_user, current_user,login_user
 from .email_confirm import *
 import random, string
 from flask_session import Session
-from os import rename
+from os import rename, path, mkdir
 from werkzeug.utils import secure_filename
 
 auth = Blueprint('auth', __name__)
@@ -97,6 +97,8 @@ def register():
         if logo : 
             logo_name = form.logo.data.filename
             file_name = secure_filename(logo_name)
+            if not path.exists('app/static/user_logo/'):
+                mkdir('app/static/user_logo')
             logo.save('app/static/user_logo/' + file_name)
             name_save = username.replace(" ", "") + '.jpg' 
             rename('app/static/user_logo/' + file_name, 'app/static/user_logo/' + name_save)
